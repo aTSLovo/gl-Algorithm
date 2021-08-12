@@ -1,4 +1,4 @@
-1/13
+13/13
 /*
 ID: atsl
 PROG: No Time to Paint
@@ -25,10 +25,9 @@ using namespace std;
 void debug(ll x)  { cout<<111<<" "<<x<<endl; }
 const int mod=1e9+7;
 const int N=100005;
-char s[N];
 int main() {
   ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
-  //freopen("photo.in", "r", stdin);
+  //freopen("2.in", "r", stdin);
   //freopen("photo.out", "w", stdout);
 //  cin>>tt;
   int tt=1;
@@ -39,43 +38,39 @@ int main() {
     cin>>s;
     vector<int> pre(n+1,0),suf(n+2,0),lm(27,-1),rm(27,-1);
     pre[1]=1;
-    lm[s[0]-'a']=0;
-    for(int i=1;i<n;i++)
-      if(s[i]>s[i-1]) pre[i+1]=pre[i]+1,lm[s[i]-'a']=i;
-      else {
-        pre[i+1]=pre[i];
-        int p=s[i]-'a';
-        if(lm[p]!=-1) {
-          for(int j=0;j<p;j++) if(lm[j]>lm[p]) pre[i+1]++;
-        }
-        else pre[i+1]++;
-        lm[p]=i;
+    lm[s[0]-'A']=0;
+    for(int i=1;i<n;i++) {
+      pre[i+1]=pre[i];
+      int p=s[i]-'A';
+      if(lm[p]!=-1) {
+        for(int j=0;j<p;j++) if(lm[j]>lm[p]) { pre[i+1]++;break; }
       }
+      else pre[i+1]++;
+      //if(i==1) cout<<pre[i+1]<<' '<<p<<' '<<lm[p]<<endl;
+      lm[p]=i;
+    }
     suf[n]=1;
-    rm[s[n-1]-'a']=n-1;
-    for(int i=n-2;i>=0;i--)
-      if(s[i]>s[i+1]) suf[i+1]=suf[i+2]+1,rm[s[i]-'a']=i;
-      else {
-        suf[i+1]=suf[i+2];
-        int p=s[i]-'a';
-        if(rm[p]!=-1) {
-          for(int j=0;j<p;j++) if(rm[j]<rm[p]) suf[i+1]++;
-        }
-        else suf[i+1]++;
-        rm[p]=i;
+    rm[s[n-1]-'A']=n-1;
+    for(int i=n-2;i>=0;i--) {
+      suf[i+1]=suf[i+2];
+      int p=s[i]-'A';
+      if(rm[p]!=-1) {
+        for(int j=0;j<p;j++) if(rm[j]!=-1&&rm[j]<rm[p]) { suf[i+1]++;break; }
       }
+      else suf[i+1]++;
+      //if(i==n-3) cout<<rm[p]<<' '<<p<<' '<<suf[i+1]<<'\n';
+      rm[p]=i;
+    }
+
     rep(i,1,k) {
       int l,r;
       cin>>l>>r;
       cout<<pre[l-1]+suf[r+1]<<'\n';
     }
+
   }
   return 0;
 }
 /*
-8 2
-ABBAABCB
-3 6
-1 4
 
 */
